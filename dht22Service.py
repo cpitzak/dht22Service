@@ -1,8 +1,8 @@
 import datetime
-import DHT22
 import pigpio
-from time import sleep
+from lib import DHT22
 from pymongo import MongoClient
+from time import sleep
 
 
 class DHT22CurrentTemp:
