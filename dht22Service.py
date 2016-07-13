@@ -56,11 +56,11 @@ class DHT22CurrentTemp:
             print "current temp {0} F and humidity {1}%".format(temp, humidity)
             self.update_current_room_weather(humidity, temp)
             now = datetime.datetime.now()
-            if now.minute < 2 and written is False:
+            if now.minute < 1 and written is False:
                 print "wrote hourly temp of {0} and humidity {1}%".format(temp, humidity)
                 self.update_room_weather(humidity, temp, now)
                 written = True
-            elif now.minute >= 2:
+            elif now.minute >= 1:
                 written = False
             sleep(self.delay)
 
