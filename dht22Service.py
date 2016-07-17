@@ -22,9 +22,12 @@ class DHT22CurrentTemp:
                                {"$set": {"temp": temp,
                                          "humidity": humidity}},
                                upsert=True)
+    def get_room_weather_db_key(self, now):
+        key = "{year}_{month}_{day}_{hour}".format(year=now.year, month=now.month, day=now.day, hour=now.hour)
+        return key
 
     def update_room_weather(self, humidity, temp, now):
-        key = "{year}_{month}_{day}_{hour}".format(year=now.year, month=now.month, day=now.day, hour=now.hour)
+        key = self.get_room_weather_db_key(now)
         self.collection_room_weather.update({'date_hour': key},
                                         {"$set": {"temp": temp,
                                                   "humidity": humidity,
@@ -50,18 +53,30 @@ class DHT22CurrentTemp:
         self.read_dht22()
         sleep(3)
 
-        written = False
+        room_hour_writes = {}
+        needs_reset = False
+        now = datetime.datetime.now()
+        key = self.get_room_weather_db_key(now)
+        # prevent updating hourly if already exists in database
+        db_writes_enabled = True if self.collection_room_weather.find_one({"date_hour": key}) == None else False
         while True:
             humidity, temp = self.read_dht22()
             print "current temp {0} F and humidity {1}%".format(temp, humidity)
             self.update_current_room_weather(humidity, temp)
             now = datetime.datetime.now()
-            if now.minute < 1 and written is False:
-                print "wrote hourly temp of {0} and humidity {1}%".format(temp, humidity)
-                self.update_room_weather(humidity, temp, now)
-                written = True
-            elif now.minute >= 1:
-                written = False
+            if db_writes_enabled:
+                if needs_reset and now.hour == 0:
+                    room_hour_writes = {}
+                    needs_reset = False
+                if now.hour not in room_hour_writes:
+                    room_hour_writes[now.hour] = True
+                    print "updated database with current temp {0} F and humidity {1}%".format(temp, humidity)
+                    self.update_room_weather(humidity, temp, now)
+                    if now.hour == 23:
+                        needs_reset = True
+            else:
+                room_hour_writes[now.hour] = True
+                db_writes_enabled = True
             sleep(self.delay)
 
 if __name__ == "__main__":
