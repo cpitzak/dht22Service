@@ -8,10 +8,11 @@ By default the service reads from gpio 12 and reads every 5 seconds (the DHT22 s
 ## Prerequisites
 You need to have the following installed:
 
-- [MongoDB](http://www.mongodb.org) and must be running
+- [MongoDB](http://www.mongodb.org) set this up as a service to run when the pi first boots up
 - [pymongo](https://docs.mongodb.com/getting-started/python/client/)
 - [pigpio](http://abyz.co.uk/rpi/pigpio/download.html)
 - [pigpio as a service](https://www.raspberrypi.org/forums/viewtopic.php?f=32&t=103752)
+- [DHT22 Sensor](https://www.adafruit.com/product/385) and everything else (breadboard, wires, Ribbon cable to connect breadboard to the pi) to connect this to your raspberry pi
 
 ## Install
 
