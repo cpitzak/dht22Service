@@ -12,7 +12,7 @@ You need to have the following installed:
 - [pymongo](https://docs.mongodb.com/getting-started/python/client/)
 - [pigpio](http://abyz.co.uk/rpi/pigpio/download.html)
 - [pigpio as a service](https://www.raspberrypi.org/forums/viewtopic.php?f=32&t=103752)
-- [DHT22 Sensor](https://www.adafruit.com/product/385) and everything else (breadboard, wires, Ribbon cable to connect breadboard to the pi) to connect this to your raspberry pi
+- [DHT22 Sensor](https://www.adafruit.com/product/385) and everything else (breadboard, wires, ribbon cable to connect breadboard to the pi) to connect this to your raspberry pi
 
 ## Install
 
