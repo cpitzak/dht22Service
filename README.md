@@ -16,9 +16,33 @@ You need to have the following installed:
 
 ## Install
 
-Note: make sure mongdb is running whenever using this service
+Install and run via Docker ([DHT22 Service Docker Repository](https://hub.docker.com/r/cpitzak/weather-dht22-service/)):
+```
+$ docker pull cpitzak/weather-dht22-service:1.0.0
+$ docker run -e "DHT22_SERVICE_MONGO_URL=mongodb://your_monog_url/weatherdb" \
+             -e "DHT22_SERVICE_DELAY=5" \
+             -e "DHT22_SERVICE_GPIO=12" \
+             --cap-add SYS_RAWIO \
+             --device /dev/mem \
+             --device /dev/vcio \
+             -p 8888:8888 \
+             cpitzak/weather-dht22-service
+```
 
+Or Build a docker image and run
+```
+$ docker build -t cpitzak/weather-dht22-service .
+$ docker run -e "DHT22_SERVICE_MONGO_URL=mongodb://your_monog_url/weatherdb" \
+             -e "DHT22_SERVICE_DELAY=5" \
+             -e "DHT22_SERVICE_GPIO=12" \
+             --cap-add SYS_RAWIO \
+             --device /dev/mem \
+             --device /dev/vcio \
+             -p 8888:8888 \
+             cpitzak/weather-dht22-service
+```
 
+Or to setup Manually
 ```
 $ sudo mkdir /apps
 $ sudo chown pi /apps
