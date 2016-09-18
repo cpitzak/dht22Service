@@ -1,5 +1,7 @@
 import datetime
+import os
 import pigpio
+from ConfigParser import SafeConfigParser
 from lib import DHT22
 from pymongo import MongoClient
 from time import sleep
@@ -8,11 +10,16 @@ from time import sleep
 class DHT22CurrentTemp:
 
 
-    def __init__(self, delay, gpio):
-        self.delay = delay
+    def __init__(self):
+        parser = SafeConfigParser()
+        cwd = os.path.dirname(os.path.realpath(__file__))
+        parser.read(os.path.join(cwd, 'config.ini'))
+        self.delay = int(os.getenv('DHT22_SERVICE_DELAY', parser.get('general', 'delay')))
+        gpio = int(os.getenv('DHT22_SERVICE_GPIO', parser.get('general', 'gpio')))
         pi = pigpio.pi()
         self.dht22 = DHT22.sensor(pi, gpio)
-        client = MongoClient('localhost', 27017)
+        mongodb_url = os.getenv('DHT22_SERVICE_MONGO_URL', parser.get('urls', 'mongodb'))
+        client = MongoClient(mongodb_url)
         self.db = client.weatherdb
         self.collection_current_room_weather = self.db.current_room_weather
         self.collection_room_weather = self.db.room_weather
@@ -80,6 +87,5 @@ class DHT22CurrentTemp:
             sleep(self.delay)
 
 if __name__ == "__main__":
-    current = DHT22CurrentTemp(5, 12)
+    current = DHT22CurrentTemp()
     current.run()
-
