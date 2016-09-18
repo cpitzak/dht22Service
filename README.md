@@ -26,7 +26,7 @@ $ docker run -e "DHT22_SERVICE_MONGO_URL=mongodb://your_monog_url/weatherdb" \
              --device /dev/mem \
              --device /dev/vcio \
              -p 8888:8888 \
-             cpitzak/weather-dht22-service
+             cpitzak/weather-dht22-service:1.0.0
 ```
 
 Or Build a docker image and run
